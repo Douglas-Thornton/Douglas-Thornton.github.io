@@ -1,0 +1,30 @@
+<div class="bg-black bg-opacity-50" style="height: 95vh;">
+  <br>
+  <div class="container bg-white rounded-1"><div class = 'row m-0 w-100'>
+    <div class="container">
+      <div class="row">
+        <div class="col" id="player1Login">
+          <div class = 'col-md-4 offset-4 mt-5' *ngIf = '!this.playerIsLoggedin'>
+            <form #myform = "ngForm" (ngSubmit) = "onSubmit(myform)" >
+              <div class = 'form-group'>
+                  <input class = 'form-control loginUsername' id="loginUsername" type = "text" name = "username" placeholder = "Username" ngModel>
+              </div>
+              <div class = 'form-group'>
+                  <input class = 'form-control loginPassword' id="loginPassword" type = "password" name = "password" placeholder = "Password" ngModel>
+              </div>
+              <input class= 'btn btn-outline-info loginSubmit' id="loginSubmit" type = "submit" value = "Login">
+            </form>
+          </div>
+          <div class = 'col-md-4 offset-4 mt-5' *ngIf = 'this.playerIsLoggedin'>
+              <h1 class="loginSuccess" id="loginSuccess">Logged in</h1>
+              <button class = 'btn btn-outline-info' (click) = "logout()">Log-out</button>
+          </div>
+          <div class = 'col-md-4 offset-4 mt-5' *ngIf = 'this.errorMessage'>
+            <h1>{{this.errorMessage}}</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+</div>

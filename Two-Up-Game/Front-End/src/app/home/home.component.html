@@ -1,0 +1,53 @@
+<div class="bg-black bg-opacity-50" style="height: 95vh;">
+  <br>
+  <div class="container bg-white rounded-1 text-center">
+    <div class="container pt-lg-5">
+      <div class="row align-items-start">
+        <div class="col">
+          <h1>Welcome to the ANZAC day <a href="https://en.wikipedia.org/wiki/Two-up" target="_blank">Two-up game!</a></h1>
+          <h2>To start playing click the game button at the top bar!</h2>
+        </div>
+      </div>
+      <h3>Current top player!</h3>
+      <div *ngIf="topUsers?.length">
+        <div class="row align-items-start">
+          <div class="col">
+            <div class="bg-black">
+              <div class="container bg-white rounded-1">
+                <div class="row">
+                  <div class="col" >
+                    <h1 class="text-center">Top player!</h1>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Username</th><th>Score</th><th>Favorite colour</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let topUser of topUsers; let i = index" style="border: 1.7px solid;" [ngStyle]="topUser.favColorHex?{'border-color':topUser.favColorHex, 'background-color':topUser.favColorHex}:{'border-color':'black','background-color':'white'}">
+                          <td class="leaderboardClearText" >
+                            {{topUser.username}}
+                          </td>
+                          <td class="leaderboardClearText">
+                            {{topUser.score}}
+                          </td>
+                          <td>
+                            <span class="leaderboardClearText">{{topUser.favColorHex?topUser.favColorHex:'No colour set'}}</span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!topUsers?.length">
+        <h4>
+          No top player; place the first score!
+        </h4>
+      </div>
+    </div>
+</div>

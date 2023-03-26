@@ -1,0 +1,41 @@
+<div class="bg-black bg-opacity-50" style="height: 95vh;">
+  <br>
+  <div class="container bg-white rounded-1">
+    <div class="row">
+      <div class="col" >
+        <h1 class="text-center">Top 10 players:</h1>
+        <div *ngIf="topUsers?.length">
+          <table class="table">
+            <thead>
+              <tr>
+                <th></th><th>Username</th><th>Score</th><th>Colour hex</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let topUser of topUsers; let i = index" style="border: 1.7px solid;" [ngStyle]="topUser.favColorHex?{'border-color':topUser.favColorHex, 'background-color':topUser.favColorHex}:{'border-color':'black','background-color':'white'}">
+                <td class="leaderboardClearText">
+                  {{i+1}}.
+                </td>
+                <td class="leaderboardClearText" >
+                  {{topUser.username}}
+                </td>
+                <td class="leaderboardClearText">
+                  {{topUser.score}}
+                </td>
+                <td>
+                  <span class="leaderboardClearText">{{topUser.favColorHex?topUser.favColorHex:'No colour set'}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="!topUsers?.length">
+          <h4 class="text-center">
+            No top player; place the first score!
+          </h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+</div>

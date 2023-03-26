@@ -1,0 +1,56 @@
+<div  id="gui" *ngIf="playerIsLoggedin"  [ngStyle]="{'background-color':PUser.favColorHex}">
+  <form #myform = "ngForm" (ngSubmit) = "submitScore()" style="height: 95vh;" class="pt-4">
+    <div class="container bg-white rounded-1">
+      <div class="row">
+        <div class="col" >
+          <h1 class="text-center">{{PUser.username}}</h1>
+          <p class="m-1"> Session score: {{ PSessionScore }}</p>
+          <p class="m-1"> Total score: {{ PUser.score }}</p>
+          <label class="m-1" for="Player1BGColor">Background color: </label>
+          <input class="m-1" #PlayerBGColour type="color" id="PlayerBGColor" (input)="ChangeBackgroundColour(1,PlayerBGColour.value)">
+        </div>
+        <div class="row" id="PlayerBet">
+          <select #PBetSelectBox id="PlayerBetSelectBox" class="form-select"  [disabled]="Spinning" (change)="PBetSelected(PBetSelectBox.value)">
+            <option value="Two Heads">
+              Two Heads
+            </option>
+            <option value="Two Tails">
+              Two Tails
+            </option>
+            <option value="Even">
+              Even
+            </option>
+          </select>
+        </div>
+        <button class="btn btn-primary" (click)="reroll()" [disabled]="Spinning" >Reroll (space)</button>
+        <button class="btn btn-success" type="submit" #scoreSubmit vid="scoreSubmit" [disabled]="Spinning">submit score</button>
+      </div>
+      <div class="row">
+        <div class="col" id="coin_1">
+          <div *ngIf="!Spinning; else SpinningAnimation">
+            <div *ngIf="coin_1">
+              <img src="assets/images/penny-heads.png">
+            </div>
+            <div *ngIf="!coin_1">
+              <img src="assets/images/penny-tails.png">
+            </div>
+          </div>
+        </div>
+        <div class="col" id="coin_2">
+          <div *ngIf="!Spinning; else SpinningAnimation">
+            <div *ngIf="coin_2">
+              <img src="assets/images/penny-heads.png">
+            </div>
+            <div *ngIf="!coin_2">
+              <img src="assets/images/penny-tails.png">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</form>
+  <ng-template #SpinningAnimation>
+    <app-coin-spin></app-coin-spin>
+  </ng-template>
+
+</div>
