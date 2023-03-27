@@ -54,7 +54,6 @@ describe('LoginComponent', () => {
       }
     }
 
-    // Make api call.
     component.onSubmit(testForm);
 
     // Set up mock request
