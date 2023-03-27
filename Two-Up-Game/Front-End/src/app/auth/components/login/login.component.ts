@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {NgForm} from '@angular/forms';
+import {FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
 import { ApiService } from './../../../services/api.service'
 import { AuthService } from './../../../services/auth.service'
 import { Router } from '@angular/router';
@@ -9,23 +9,30 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  playerIsLoggedin: boolean = false
+  playerLoggedin: boolean = false
   errorMessage: any
+  myForm: FormGroup = new FormGroup({
+    username: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8)])
+  });
   constructor(
     private _api: ApiService,
     private _auth: AuthService,
     private _router:Router
   ) { }
-  ngOnInit() {
-    this.isUsersLoggedIn();
-  }
+
+   ngOnInit(): void {
+    this._auth.getLoggedIn().subscribe(value => {
+      this.playerLoggedin = value;
+    });
+   }
 
   /*
     Submits the form to the user API log in the user.
     If user API returns with success it will set the user into local storage.
     If user api returns with failure a error message will appear.
   */
-  onSubmit(form: NgForm) {
+  onSubmit(form: FormGroup) {
     this.errorMessage = undefined;
     console.log('Your form data : ', form.value);
     this._api.postTypeRequest('user/login', form.value).subscribe((res: any) => {
@@ -34,7 +41,7 @@ export class LoginComponent implements OnInit {
       {
           this._auth.setDataInLocalStorage('playerData', JSON.stringify(res.data));
           this._auth.setDataInLocalStorage('playerToken', res.token);
-          this.isUsersLoggedIn();
+          this._auth.setLoggedIn(true);
       }
       else
       {
@@ -44,23 +51,11 @@ export class LoginComponent implements OnInit {
   }
 
   /*
-    Checks if the is local data storage for a currently logged in user.
-    If data is retrieved the player is logged in and will be redirected to the game.
-  */
-  isUsersLoggedIn(){
-    if(this._auth.getPlayerDetails() != null)
-    {
-      this.playerIsLoggedin = true;
-    }
-  }
-
-  /*
     Logs out the current user by clearing out the local storage.
   */
   logout()
   {
     this._auth.logoutPlayer();
-    this.playerIsLoggedin = false;
   }
 
   /*
@@ -68,7 +63,7 @@ export class LoginComponent implements OnInit {
   */
   redirectToGame()
   {
-    if(this.playerIsLoggedin)
+    if(this._auth.getLoggedIn())
     {
       this._router.navigate(['gui']);
     }

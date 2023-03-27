@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   constructor() { }
+  private loggedIn = new BehaviorSubject<boolean>(false);
+
 
   /*
     Check local storage for player data and if data is found; return it.
@@ -43,5 +46,14 @@ export class AuthService {
   logoutPlayer() {
     localStorage.removeItem('playerData');
     localStorage.removeItem('playerToken');
+    this.setLoggedIn(false);
+  }
+
+  setLoggedIn(value: boolean) {
+    this.loggedIn.next(value);
+  }
+
+  getLoggedIn() {
+    return this.loggedIn.asObservable();
   }
 }

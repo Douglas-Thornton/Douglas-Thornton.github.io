@@ -11,7 +11,7 @@ import {NgForm} from '@angular/forms';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent{
+export class AppComponent implements OnInit{
   title = 'Two-Up-Game';
   playerLoggedin: boolean = false
   errorMessage: any
@@ -26,6 +26,12 @@ export class AppComponent{
       {
         this.isUsersLogin();
       }
+    });
+   }
+
+   ngOnInit(): void {
+    this._auth.getLoggedIn().subscribe(value => {
+      this.playerLoggedin = value;
     });
    }
 
