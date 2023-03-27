@@ -1,50 +1,72 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import {FormControl, FormsModule} from '@angular/forms';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {FormsModule, NgForm} from '@angular/forms';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { LoginComponent } from './login.component';
 import { RouterTestingModule } from '@angular/router/testing'; // import the RouterTestingModule
-import { trigger } from '@angular/animations';
-import { Router } from '@angular/router';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
+  let httpMock: HttpTestingController;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, FormsModule,RouterTestingModule],
+      imports: [HttpClientTestingModule,RouterTestingModule, FormsModule],
       declarations: [ LoginComponent ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+
+    httpMock = TestBed.inject(HttpTestingController)
   });
+
+  afterEach(() => {
+    httpMock.verify();
+  })
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   it('should confirm log in if successful', async () => {
-    const usernameField = fixture.debugElement.query(By.css('#loginUsername')).nativeElement;
-    const passwordField = fixture.debugElement.query(By.css('#loginPassword')).nativeElement;
-    const form = fixture.debugElement.query(By.css('form')).nativeElement;
-
-    spyOn(component, 'onSubmit');
-    spyOn(component, 'redirectToGame');
-
-    usernameField.value = 'jasmine';
-    passwordField.value = 'jasmine';
-
-    form.dispatchEvent(new Event('submit'));
-    fixture.detectChanges();
-
-    if (fixture.ngZone) {
-      await fixture.ngZone.run(() => {
-        expect(component.onSubmit).toHaveBeenCalled();
-      });
+    // Set up mock response data.
+    const mockResponse = {
+      status: true,
+      data:
+      [
+        {
+          username: 'User1',
+          favColorHex: '#000000',
+          score: 100
+        }
+      ]
     }
+
+    // Set up mock form
+    const testForm = <NgForm>
+    {
+      value:
+      {
+        password: "TestUser1",
+        username: "TestUser1"
+      }
+    }
+
+    // Make api call.
+    component.onSubmit(testForm);
+
+    // Set up mock request
+    const mockRequest = httpMock.expectOne('http://localhost:4000/user/login');
+
+    // Assert that the correct HTTP method is used
+    expect(mockRequest.request.method).toEqual('POST');
+
+    // Respond with mock data
+    mockRequest.flush(mockResponse);
+
+    // Assert that the component has logged in a user.
+    expect(component.playerIsLoggedin).toEqual(true);
   });
 });

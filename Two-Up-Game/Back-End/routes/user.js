@@ -77,7 +77,7 @@ router.post('/app', async function (req, res, next) {
     let { username, password } = req.body; 
     console.log("Login post: " + username +" "+ password)
     const hashed_password = md5(password.toString())
-    const sql = `SELECT * FROM users WHERE username = ? AND password = ?`
+    const sql = `SELECT username, score, favColorHex FROM users WHERE username = ? AND password = ?`
     con.query(
       sql, [username, hashed_password],
     function(err, result, fields){
@@ -111,7 +111,7 @@ router.post('/login', async function (req, res, next) {
     let { username, password } = req.body; 
     console.log("Login post: " + username +" "+ password)
     const hashed_password = md5(password.toString())
-    const sql = `SELECT * FROM users WHERE username = ? AND password = ?`
+    const sql = `SELECT username, score, favColorHex FROM users WHERE username = ? AND password = ?`
     con.query(
       sql, [username, hashed_password],
     function(err, result, fields){

@@ -34,7 +34,6 @@ export class LoginComponent implements OnInit {
       {
           this._auth.setDataInLocalStorage('playerData', JSON.stringify(res.data));
           this._auth.setDataInLocalStorage('playerToken', res.token);
-          window.location.reload();
           this.isUsersLoggedIn();
       }
       else
@@ -52,7 +51,6 @@ export class LoginComponent implements OnInit {
     if(this._auth.getPlayerDetails() != null)
     {
       this.playerIsLoggedin = true;
-      this.redirectToGame();
     }
   }
 
@@ -63,8 +61,7 @@ export class LoginComponent implements OnInit {
   {
     this._auth.logoutPlayer();
     this.playerIsLoggedin = false;
-    window.location.reload();
-   }
+  }
 
   /*
     Redirects current url the game window if the player is logged in.

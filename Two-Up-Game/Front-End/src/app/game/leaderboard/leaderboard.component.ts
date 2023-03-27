@@ -25,7 +25,6 @@ export class LeaderboardComponent implements OnInit{
   ngOnInit(): void {
 
     this._api.postTypeRequest('user/leaderboard','').subscribe((res: any) => {
-
       if (res.status) {
         //console.log(res.data)
         res.data.forEach((Object: any) =>
@@ -42,7 +41,5 @@ export class LeaderboardComponent implements OnInit{
         });
       }
     })
-
   }
-
 }
