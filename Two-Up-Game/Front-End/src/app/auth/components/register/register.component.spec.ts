@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { RegisterComponent } from './register.component';
 import { AuthService } from './../../../services/auth.service'
-import {FormsModule, NgForm} from '@angular/forms'
+import {FormGroup, FormsModule, NgForm} from '@angular/forms'
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('RegisterComponent', () => {
@@ -50,7 +50,7 @@ describe('RegisterComponent', () => {
     }
 
     // Set up mock form
-    const testForm = <NgForm>
+    const testForm = <FormGroup>
     {
       value:
       {
@@ -72,7 +72,7 @@ describe('RegisterComponent', () => {
     mockRequest.flush(mockResponse);
 
     // Assert that the component has logged in a user.
-    expect(component.playerIsLoggedin).toEqual(true);
+    expect(component.playerLoggedin).toEqual(true);
 
   })
 });
