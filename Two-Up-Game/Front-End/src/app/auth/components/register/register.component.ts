@@ -32,15 +32,11 @@ export class RegisterComponent implements OnInit {
     this._api.postTypeRequest('user/register', form.value).subscribe((res: any) => {
       if (res.status)
       {
+          console.log("register data:" + res.data);
           this._auth.setDataInLocalStorage('playerData', JSON.stringify(res.data));
           this._auth.setDataInLocalStorage('playerToken', res.token);
-          this.playerIsLoggedin = true;
+          this.isUsersLoggedIn();
 
-          window.location.reload();
-          if(this.playerIsLoggedin)
-          {
-            this._router.navigate(['gui']);
-          }
       } else {
         this.errorMessage = res.data;
       }
@@ -55,7 +51,6 @@ export class RegisterComponent implements OnInit {
       if(this._auth.getPlayerDetails() != null)
       {
         this.playerIsLoggedin = true;
-        this.redirectToGame();
       }
     }
 

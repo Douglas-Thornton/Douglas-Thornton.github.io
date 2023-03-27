@@ -26,7 +26,6 @@ router.post('/register', async function (req, res, next) {
     {
       const hashed_password = md5(password.toString())
       const checkUsername = `Select username FROM users WHERE username = ?`;
-      console.log("regi")
       con.query(checkUsername, [username], (err, result, fields) => 
       {
         console.log(result.length);
@@ -44,8 +43,23 @@ router.post('/register', async function (req, res, next) {
                 }
                 else
                 {
-                  let token = jwt.sign({ data: result }, 'secret')
-                  res.send({ status: 1, data: result, token : token });
+                  const sql = `SELECT username, score, favColorHex FROM users WHERE username = ? AND email = ? AND password = ?`
+                  con.query
+                  (
+                    sql, [username, email, hashed_password],
+                    (err, result, fields) => 
+                    {
+                      if(err)
+                      {
+                        res.send({ status: 0, data: err });
+                      }
+                      else
+                      {
+                        let token = jwt.sign({ data: result }, 'secret')
+                        res.send({ status: 1, data: result, token : token });
+                      }  
+                    }
+                  )
                 }
               }
             )
