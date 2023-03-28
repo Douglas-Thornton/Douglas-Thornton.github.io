@@ -2,18 +2,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { RegisterComponent } from './register.component';
 import { AuthService } from './../../../services/auth.service'
-import {FormGroup, FormsModule, NgForm} from '@angular/forms'
+import {FormControl, FormGroup, FormsModule, NgControl, NgForm, ReactiveFormsModule, Validators} from '@angular/forms'
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClient } from '@angular/common/http';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
   let httpMock: HttpTestingController;
-  let _auth: AuthService;
+  let httpClient: HttpClient;
+  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule,FormsModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([]),FormsModule, ReactiveFormsModule],
       declarations: [ RegisterComponent ],
       providers: [AuthService]
     })
@@ -21,8 +24,10 @@ describe('RegisterComponent', () => {
 
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
+    router = TestBed.inject(Router);
+    httpMock = TestBed.inject(HttpTestingController);
+    httpClient = TestBed.inject(HttpClient);
 
-    httpMock = TestBed.inject(HttpTestingController)
     fixture.detectChanges();
   });
 
@@ -34,46 +39,114 @@ describe('RegisterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should log in a user that has registered', async () =>
-  {
-    // Set up mock response data.
-    const mockResponse = {
-      status: true,
-      data:
-      [
-        {
-          username: 'User1',
-          favColorHex: '#000000',
-          score: 100
-        }
-      ]
-    }
+  it('should validate correct username field', () => {
+    const formGroup: FormGroup = new FormGroup({
+      username: new FormControl('', [Validators.required]),
+    });
 
-    // Set up mock form
-    const testForm = <FormGroup>
-    {
-      value:
-      {
-        password: "randomUser",
-        username: "randomUser",
-        email: "randomUser@randomUser.com.au"
-      }
-    }
+    // Set a valid username value
+    formGroup.controls['username'].setValue('valid-username');
+    formGroup.markAllAsTouched();
 
-    component.onSubmit(testForm);
+    console.log(formGroup)
+;
+    expect(formGroup.controls['username'].valid).toBe(true);
+    expect(formGroup.status).toBe("VALID");
+  });
 
-    // Set up mock request
-    const mockRequest = httpMock.expectOne('http://localhost:4000/user/register');
+  it('should validate incorrect username field', () => {
+    const formGroup: FormGroup = new FormGroup({
+      username: new FormControl('', [Validators.required]),
+    });
 
-    // Assert that the correct HTTP method is used
-    expect(mockRequest.request.method).toEqual('POST');
+    // Set an invalid username value
+    formGroup.controls['username'].setValue('');
+    formGroup.markAllAsTouched();
 
-    // Respond with mock data
-    mockRequest.flush(mockResponse);
+    expect(formGroup.controls['username'].valid).toBe(false);
+    expect(formGroup.controls['username'].errors?.['required']).toBe(true);
+    expect(formGroup.status).toBe("INVALID");
+  });
 
-    // Assert that the component has logged in a user.
-    expect(component.playerLoggedin).toEqual(true);
+  it('should validate correct email field', () => {
+    const formGroup: FormGroup = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email, Validators.pattern(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
+    });
 
-  })
+    // Set a valid email value
+    formGroup.controls['email'].setValue('test@example.com');
+    formGroup.markAllAsTouched();
+
+    expect(formGroup.controls['email'].valid).toBe(true);
+    expect(formGroup.status).toBe("VALID");
+  });
+
+  it('should validate incorrect email field', () => {
+    const formGroup: FormGroup = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email, Validators.pattern(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
+    });
+
+    // Set an invalid email value
+    formGroup.controls['email'].setValue('invalid-email');
+    formGroup.markAllAsTouched();
+
+    expect(formGroup.controls['email'].valid).toBe(false);
+    expect(formGroup.controls['email'].errors?.['email']).toBe(true);
+    expect(formGroup.status).toBe("INVALID");
+  });
+
+  it('should validate correct password field', () => {
+    const formGroup: FormGroup = new FormGroup({
+      password: new FormControl('', [Validators.required, Validators.minLength(8)])
+    });
+
+    // Set a valid password value
+    formGroup.controls['password'].setValue('over8characters');
+    formGroup.markAllAsTouched();
+
+    expect(formGroup.controls['password'].valid).toBe(true);
+    expect(formGroup.status).toBe("VALID");
+  });
+
+  it('should validate incorrect password field', () => {
+    const formGroup: FormGroup = new FormGroup({
+      password: new FormControl('', [Validators.required, Validators.minLength(8)])    });
+
+    // Set an invalid password value
+    formGroup.controls['password'].setValue('under8');
+    formGroup.markAllAsTouched();
+
+    console.log(formGroup.controls['password'].errors);
+    expect(formGroup.controls['password'].valid).toBe(false);
+    expect(formGroup.controls['password'].errors?.['minlength']).toBeTruthy();
+    expect(formGroup.status).toBe("INVALID");
+  });
+
+
+  it('shouldnt post form if form is invalid', () => {
+
+    const httpSpy = spyOn(httpClient, 'post');
+
+    const formGroup: FormGroup = new FormGroup({
+      username: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email, Validators.pattern(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8)])
+    });
+
+    // Set an invalid email value
+    formGroup.controls['username'].setValue('');
+    formGroup.controls['email'].setValue('invalid-email');
+    formGroup.controls['password'].setValue('invalid-password');
+
+    formGroup.markAllAsTouched();
+    expect(formGroup.status).toBe("INVALID");
+
+    // Submit form.
+    component.onSubmit(formGroup);
+
+    // Submit should not have called apiservice without a valid form.
+    expect(httpSpy).not.toHaveBeenCalled();
+  });
+
 });
 

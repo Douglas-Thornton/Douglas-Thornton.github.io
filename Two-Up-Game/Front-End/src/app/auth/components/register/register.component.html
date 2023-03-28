@@ -9,7 +9,6 @@
               <h4>Register P1</h4>
               <form [formGroup]='myForm' (ngSubmit)='onSubmit(myForm)'>
                 <div class = 'form-group'>
-
                   <input id="username" class = 'form-control' type = "text" name = "username" placeholder = "username" formControlName='username'>
                     <label for="username" class="form-label">
                       <span class="text-danger" *ngIf="myForm.get('username')?.invalid && myForm.get('username')?.errors && (myForm.get('username')?.dirty || myForm.get('username')?.touched)">

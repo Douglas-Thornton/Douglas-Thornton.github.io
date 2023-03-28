@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
     If user api returns with failure a error message will appear.
   */
   onSubmit(form: FormGroup) {
+    if (this.myForm.valid) {
     this.errorMessage = undefined;
     console.log('Your form data : ', form.value);
     this._api.postTypeRequest('user/login', form.value).subscribe((res: any) => {
@@ -48,6 +49,7 @@ export class LoginComponent implements OnInit {
         this.errorMessage = res.data;
       }
     })
+   }
   }
 
   /*
