@@ -43,7 +43,7 @@ router.post('/register', async function (req, res, next) {
                 }
                 else
                 {
-                  const sql = `SELECT username, score, favColorHex FROM users WHERE username = ? AND email = ? AND password = ?`
+                  const sql = `SELECT username, score, favColourHex FROM users WHERE username = ? AND email = ? AND password = ?`
                   con.query
                   (
                     sql, [username, email, hashed_password],
@@ -91,7 +91,7 @@ router.post('/app', async function (req, res, next) {
     let { username, password } = req.body; 
     console.log("Login post: " + username +" "+ password)
     const hashed_password = md5(password.toString())
-    const sql = `SELECT username, score, favColorHex FROM users WHERE username = ? AND password = ?`
+    const sql = `SELECT username, score, favColourHex FROM users WHERE username = ? AND password = ?`
     con.query(
       sql, [username, hashed_password],
     function(err, result, fields){
@@ -125,7 +125,7 @@ router.post('/login', async function (req, res, next) {
     let { username, password } = req.body; 
     console.log("Login post: " + username +" "+ password)
     const hashed_password = md5(password.toString())
-    const sql = `SELECT username, score, favColorHex FROM users WHERE username = ? AND password = ?`
+    const sql = `SELECT username, score, favColourHex FROM users WHERE username = ? AND password = ?`
     con.query(
       sql, [username, hashed_password],
     function(err, result, fields){
@@ -194,7 +194,7 @@ Responds with the top 10 users.
 router.post('/leaderboard', async function (req, res, next) {
   try 
   {
-    const sqlLeaderboardGet = `select username, score, favColorHex from users order by score desc limit 10;`
+    const sqlLeaderboardGet = `select username, score, favColourHex from users order by score desc limit 10;`
     con.query(
       sqlLeaderboardGet,
     function(err, result, fields){
@@ -220,7 +220,7 @@ Responds with the top user.
 router.post('/home', async function (req, res, next) {
   try 
   {
-    const sqlLeaderboardGet = `select username, score, favColorHex from users order by score desc limit 1;`
+    const sqlLeaderboardGet = `select username, score, favColourHex from users order by score desc limit 1;`
     con.query(
       sqlLeaderboardGet,
     function(err, result, fields){

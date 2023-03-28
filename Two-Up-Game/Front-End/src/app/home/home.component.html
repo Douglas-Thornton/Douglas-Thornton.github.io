@@ -24,7 +24,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let topUser of topUsers; let i = index" style="border: 1.7px solid;" [ngStyle]="topUser.favColorHex?{'border-color':topUser.favColorHex, 'background-color':topUser.favColorHex}:{'border-color':'black','background-color':'white'}">
+                        <tr *ngFor="let topUser of topUsers; let i = index" style="border: 1.7px solid;" [ngStyle]="topUser.favColourHex?{'border-color':topUser.favColourHex, 'background-color':topUser.favColourHex}:{'border-color':'black','background-color':'white'}">
                           <td class="leaderboardClearText" >
                             {{topUser.username}}
                           </td>
@@ -32,7 +32,7 @@
                             {{topUser.score}}
                           </td>
                           <td>
-                            <span class="leaderboardClearText">{{topUser.favColorHex?topUser.favColorHex:'No colour set'}}</span>
+                            <span class="leaderboardClearText">{{topUser.favColourHex?topUser.favColourHex:'No colour set'}}</span>
                           </td>
                         </tr>
                       </tbody>

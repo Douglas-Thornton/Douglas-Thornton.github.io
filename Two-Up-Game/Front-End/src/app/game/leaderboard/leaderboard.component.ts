@@ -31,7 +31,7 @@ export class LeaderboardComponent implements OnInit{
         {
           let tempUser:user = new user();
           tempUser.username = Object['username'];
-          tempUser.favColorHex = Object['favColorHex'];
+          tempUser.favColourHex = Object['favColourHex'];
           tempUser.score = Object['score'];
           this.topUsers?.push(tempUser);
         });

@@ -37,12 +37,12 @@ describe('LeaderboardComponent', () => {
       [
         {
           username: 'User1',
-          favColorHex: '#000000',
+          favColourHex: '#000000',
           score: 100
         },
         {
           username: 'User2',
-          favColorHex: '#ffffff',
+          favColourHex: '#ffffff',
           score: 200
         }
       ]
@@ -63,11 +63,11 @@ describe('LeaderboardComponent', () => {
       // Assert that the component's topUsers array is populated with the correct data
       expect(component.topUsers.length).toEqual(mockResponse.data.length);
       expect(component.topUsers[0].username).toEqual(mockResponse.data[0].username);
-      expect(component.topUsers[0].favColorHex).toEqual(mockResponse.data[0].favColorHex);
+      expect(component.topUsers[0].favColourHex).toEqual(mockResponse.data[0].favColourHex);
       expect(component.topUsers[0].score).toEqual(mockResponse.data[0].score);
 
       expect(component.topUsers[1].username).toEqual(mockResponse.data[1].username);
-      expect(component.topUsers[1].favColorHex).toEqual(mockResponse.data[1].favColorHex);
+      expect(component.topUsers[1].favColourHex).toEqual(mockResponse.data[1].favColourHex);
       expect(component.topUsers[1].score).toEqual(mockResponse.data[1].score);
   });
 });

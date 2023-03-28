@@ -9,25 +9,26 @@ It does not store the users password.
 */
 export class user implements Serializable<user> {
 
-  id: number = 0;
   username: string = "";
-  email: string = "";
   score: number = 0;
-  favColorHex: string = "";
+  favColourHex: string = "";
 
   deserialize(input:any) {
       console.log("Deserializing user: " + input[0]);
-      this.id = Number.parseInt(input[0].id);
       this.username = input[0].username;
-      this.email = input[0].email;
+      console.log("Deserializing username: " + input[0].username);
       this.score = Number.parseInt(input[0].score);
-      if(input[0].favColorHex == undefined)
+      console.log("Deserializing score: " + input[0].score);
+
+      console.log("Deserializing colour: " + input[0].favColourHex);
+
+      if(input[0].favColourHex == undefined)
       {
-        this.favColorHex = "#FFFFFF"
+        this.favColourHex = "#FFFFFF"
       }
       else
       {
-        this.favColorHex = input[0].favColorHex;
+        this.favColourHex = input[0].favColourHex;
       }
 
       return this;

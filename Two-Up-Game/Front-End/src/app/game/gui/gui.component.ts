@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import {NgForm} from '@angular/forms';
+import {FormsModule} from '@angular/forms';
 import { ApiService } from './../../services/api.service'
 import { AuthService } from './../../services/auth.service'
 import { Serializer } from '@angular/compiler';
@@ -21,12 +21,10 @@ export class GuiComponent implements OnInit {
     }
   }
 
-
-
   constructor(
     private _api: ApiService,
     private _auth: AuthService,
-    private _router:Router
+    public _router:Router
   ) { }
 
   playerIsLoggedin: boolean = false
@@ -40,7 +38,6 @@ export class GuiComponent implements OnInit {
   PUsername:string = "";
   PChosenBet:Bet = Bet.Two_Heads;
   PSessionScore:number = 0;
-
   Spinning:boolean = false;
 
   Result:Bet = Bet.Two_Heads;
@@ -52,26 +49,29 @@ export class GuiComponent implements OnInit {
     "Even"
   ]
 
-  ngOnInit() {
-    this.isUsersLoggedIn();
-
-    this.reroll();
+  ngOnInit(): void {
+    this._auth.getLoggedIn().subscribe(value => {
+      this.playerIsLoggedin = value;
+    });
+    this.isUserLoggedIn();
+    this.fakeReroll();
   }
 
-  isUsersLoggedIn()
+  isUserLoggedIn()
   {
     if(this._auth.getPlayerDetails() != null)
     {
       var PDetails = this._auth.getPlayerDetails()
       if(PDetails != null)
       {
-
         this.PUser = new user().deserialize(JSON.parse(PDetails));
-        this.playerIsLoggedin = true;
+        this._auth.setLoggedIn(true);
       }
+
     }
     else
     {
+      this._auth.logoutPlayer();
       this._router.navigate(['login']);
     }
   }
@@ -86,12 +86,24 @@ export class GuiComponent implements OnInit {
      this.coin_1 = Math.random() < 0.5;
      this.coin_2 = Math.random() < 0.5;
 
-     // this.coin_1 = true;
-     // this.coin_2 = true;
-
-
      // Wait 2 secconds then stop spinning.
      this.runAsync().then(() => {
+       this.Spinning = false;
+     });
+   }
+
+  // On page load complete a coin flip animation without attributing score.
+   fakeReroll() : void
+   {
+     // Start spinning.
+     this.Spinning = true;
+
+     // Determine the results of the 2 coins.
+     this.coin_1 = Math.random() < 0.5;
+     this.coin_2 = Math.random() < 0.5;
+
+     // Wait 2 secconds then stop spinning.
+     this.fakeAsync().then(() => {
        this.Spinning = false;
      });
    }
@@ -106,6 +118,14 @@ export class GuiComponent implements OnInit {
    }
    PBetSelected (value:String): void {
     this.PChosenBet = value as Bet;
+  }
+
+  fakeAsync(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve();
+      }, 2000)
+    });
   }
 
   calculateResult()
@@ -129,18 +149,6 @@ export class GuiComponent implements OnInit {
     if(this.PChosenBet == this.Result)
     {
       this.PSessionScore++;
-    }
-  }
-
-  ChangeBackgroundColour(player:number, value:string)
-  {
-    if(player == 1)
-    {
-      this.PUser.favColorHex = value;
-    }
-    else
-    {
-      this.PUser.favColorHex = value;
     }
   }
 

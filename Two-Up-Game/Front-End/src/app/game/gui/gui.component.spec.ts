@@ -23,4 +23,13 @@ describe('GuiComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should set favColourHex property correctly on ChangeBackgroundColour', () => {
+    const component = TestBed.createComponent(GuiComponent).componentInstance;
+    const value = '#ffffff';
+
+    expect(component.PUser.favColourHex).toEqual(value);
+  });
+
+
 });

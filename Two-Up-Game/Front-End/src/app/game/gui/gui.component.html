@@ -1,4 +1,4 @@
-<div  id="gui" *ngIf="playerIsLoggedin"  [ngStyle]="{'background-color':PUser.favColorHex}">
+<div  id="gui" *ngIf="playerIsLoggedin"  [ngStyle]="{'background-color':PUser.favColourHex}">
   <form #myform = "ngForm" (ngSubmit) = "submitScore()" style="height: 95vh;" class="pt-4">
     <div class="container bg-white rounded-1">
       <div class="row">
@@ -6,8 +6,9 @@
           <h1 class="text-center">{{PUser.username}}</h1>
           <p class="m-1"> Session score: {{ PSessionScore }}</p>
           <p class="m-1"> Total score: {{ PUser.score }}</p>
-          <label class="m-1" for="Player1BGColor">Background color: </label>
-          <input class="m-1" #PlayerBGColour type="color" id="PlayerBGColor" (input)="ChangeBackgroundColour(1,PlayerBGColour.value)">
+          <label class="m-1" for="Player1BGColour">Background colour: </label>
+          <input class="m-1" #PlayerBGColour  type="color" id="PlayerBGColour" [(ngModel)]="PUser.favColourHex" [ngModelOptions]="{standalone: true}">
+          <span>{{ PUser.favColourHex }}</span>
         </div>
         <div class="row" id="PlayerBet">
           <select #PBetSelectBox id="PlayerBetSelectBox" class="form-select"  [disabled]="Spinning" (change)="PBetSelected(PBetSelectBox.value)">
@@ -23,7 +24,7 @@
           </select>
         </div>
         <button class="btn btn-primary" (click)="reroll()" [disabled]="Spinning" >Reroll (space)</button>
-        <button class="btn btn-success" type="submit" #scoreSubmit vid="scoreSubmit" [disabled]="Spinning">submit score</button>
+        <button class="btn btn-success" type="submit" #scoreSubmit vid="scoreSubmit" [disabled]="Spinning">submit score and favorite colour</button>
       </div>
       <div class="row">
         <div class="col" id="coin_1">
