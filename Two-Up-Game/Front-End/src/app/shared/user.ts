@@ -14,14 +14,8 @@ export class user implements Serializable<user> {
   favColourHex: string = "";
 
   deserialize(input:any) {
-      console.log("Deserializing user: " + input[0]);
       this.username = input[0].username;
-      console.log("Deserializing username: " + input[0].username);
       this.score = Number.parseInt(input[0].score);
-      console.log("Deserializing score: " + input[0].score);
-
-      console.log("Deserializing colour: " + input[0].favColourHex);
-
       if(input[0].favColourHex == undefined)
       {
         this.favColourHex = "#FFFFFF"
