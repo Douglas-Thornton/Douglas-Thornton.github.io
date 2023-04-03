@@ -7,7 +7,7 @@
           <p class="m-1"> Session score: {{ PSessionScore }}</p>
           <p class="m-1"> Total score: {{ PUser.score }}</p>
           <label class="m-1" for="Player1BGColour">Background colour: </label>
-          <input class="m-1" #PlayerBGColour  type="color" id="PlayerBGColour" [(ngModel)]="PUser.favColourHex" [ngModelOptions]="{standalone: true}">
+          <input class="m-1 PlayerBGColour" #PlayerBGColour  type="color" id="PlayerBGColour" [(ngModel)]="PUser.favColourHex" [ngModelOptions]="{standalone: true}">
           <span>{{ PUser.favColourHex }}</span>
         </div>
         <div class="row" id="PlayerBet">
