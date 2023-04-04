@@ -3,7 +3,7 @@
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <form #myform = "ngForm" (ngSubmit) = "onSubmit(myform)">
+  <form [formGroup]='myForm' (ngSubmit)='onSubmit(myForm)'>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item active">
@@ -26,18 +26,33 @@
         </li>
         <li *ngIf="!playerLoggedin" class="nav-item">
           <div class="input-group mb-3">
-            <input class="form-control" type = "text" name = "username"  placeholder="Username" aria-label="Username" ngModel>
+            <input id="username" class = 'form-control loginUsername' id="loginUsername" type = "text" name = "username" placeholder = "Username" formControlName='username'>
           </div>
         </li>
         <li *ngIf="!playerLoggedin" class="nav-item">
           <div class="input-group mb-3">
-            <input type="password" type = "text" name = "password" class="form-control" placeholder="password" aria-label="password" ngModel>
+            <input type="password" type="password" name="password" class="form-control" placeholder="password" aria-label="password" formControlName='password'  autocomplete="on">
           </div>
         </li>
         <li *ngIf="!playerLoggedin" class="nav-item">
           <div class="input-group mb-3">
             <button class="btn btn-primary" type="submit">Quick Login</button>
           </div>
+        </li>
+        <li *ngIf="!playerLoggedin && 'this.errorMessage'" class="nav-item">
+          <span class="text-danger nav-link">
+            {{this.errorMessage}}
+          </span>
+        </li>
+        <li *ngIf="!playerLoggedin">
+          <span class="text-danger nav-link" *ngIf="myForm.get('username')?.invalid && myForm.get('username')?.errors && (myForm.get('username')?.dirty || myForm.get('username')?.touched)">
+            Username is required
+          </span>
+        </li>
+        <li *ngIf="!playerLoggedin">
+          <span class="text-danger nav-link" *ngIf="myForm.get('password')?.invalid && myForm.get('password')?.errors && (myForm.get('password')?.dirty || myForm.get('password')?.touched)">
+            Password must be more than 8 characters
+          </span>
         </li>
       </ul>
     </div>

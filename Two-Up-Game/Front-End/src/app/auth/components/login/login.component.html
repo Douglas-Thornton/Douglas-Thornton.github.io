@@ -15,7 +15,7 @@
                   </label>
                 </div>
               <div class = 'form-group'>
-                <input id="password" class = 'form-control loginPassword' id="loginPassword" type = "password" name = "password" placeholder = "Password" formControlName='password'>
+                <input id="password" class = 'form-control loginPassword' id="loginPassword" type = "password" name = "password" placeholder = "Password" formControlName='password'  autocomplete="on">
                 <label for="password" class="form-label">
                   <span class="text-danger" *ngIf="myForm.get('password')?.invalid && myForm.get('password')?.errors && (myForm.get('password')?.dirty || myForm.get('password')?.touched)">
                     Password must be more than 8 characters

@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
 import { GuiComponent } from './game/gui/gui.component';
 import { CoinSpinComponent } from './game/coin-spin/coin-spin.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LeaderboardComponent } from './game/leaderboard/leaderboard.component';
 import { HomeComponent } from './home/home.component';
 
@@ -23,7 +23,8 @@ import { HomeComponent } from './home/home.component';
     AppRoutingModule,
     RouterModule,
     AuthModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
